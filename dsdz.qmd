@@ -1,0 +1,5 @@
+---
+title: "Data Science from Scratch"
+---
+
+These are notes from the PT-BR edition "Data Science do Zero", de Joel Grus (Rio de Janeiro: Alta Books, 2016). O repositório original do livro está [aqui](https://github.com/joelgrus/data-science-from-scratch).
