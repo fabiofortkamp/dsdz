@@ -3,3 +3,7 @@
 .Rproj.user
 README.html
 README_files
+
+*.egg-info
+
+*/__pycache__

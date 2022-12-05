@@ -1,0 +1,106 @@
+---
+title: "Chapter 1 - Introduction"
+format: html
+---
+
+Wihthout any additional libraries, Python already has some powerfull data structures.
+
+## Modeling users
+
+For instance, when modeling a social network, what is an *user*? We can think of
+an user as a dictionary, and then a list of users is literally a list of dicts:
+
+```{python}
+users = [
+    {"id": 0, "name": "Hero"},
+    {"id": 1, "name": "Dunn"},
+    {"id": 2, "name": "Sue"},
+    {"id": 3, "name": "Chi"},
+    {"id": 4, "name": "Thor"},
+    {"id": 5, "name": "Clive"},
+    {"id": 6, "name": "Hicks"},
+    {"id": 7, "name": "Devin"},
+    {"id": 8, "name": "Kate"},
+    {"id": 9, "name": "Klein"},
+]
+```
+
+Now, to model the friendship between users, we can build a graph with a list of tuples composed of lists of pairs of IDs:
+
+```{python}
+friendships = [
+    (0,1),
+    (0,2),
+    (1,2),
+    (1,3),
+    (2,3),
+    (3,4),
+    (4,5),
+    (5,6),
+    (5,7),
+    (6,8),
+    (7,8),
+    (8,9)
+]
+```
+
+Suppose now that a list of friends of user $i$ should be included in its corresponding user record(i.e. the dict whose `"id"` is the integer $i$). First we initialize the fields:
+
+```{python}
+for user in users: #i.e. for each dict in a list of dicts
+    user["friends"] = []
+```
+
+Then, we populate the newly created list
+
+```{python}
+for i,j in friendships: # recall that each element is a tuple
+    # this only works because the list was created in an ordered manner
+    users[i]["friends"].append(users[j])
+    users[j]["friends"].append(users[i])
+```
+
+How many connections are there?
+
+```{python}
+import dsdz
+total_connections = sum(dsdz.number_of_friends(user) for user in users)
+print(total_connections)
+```
+
+How many friends does an user have on average?
+
+```{python}
+num_users = len(users)
+avg_connections = total_connections / num_users
+print(avg_connections)
+```
+
+How is the distribution of number of friends? The block below creates a list of tuples (ID,number of friends):
+
+```{python}
+num_friends_by_id = [
+    (user["id"], dsdz.number_of_friends(user))
+    for user in users
+]
+
+users_with_most_friends = sorted(
+    num_friends_by_id,
+    key=lambda pair: pair[-1], # sort by the num value of the last element (i.e number of friends)
+    reverse=True
+)
+print(users_with_most_friends)
+```
+
+How about friends in common? We use Python's [Counter](https://docs.python.org/3/library/collections.html?highlight=counter#collections.Counter) object and count how many friends in common user $i$ has with each of its friends:
+
+```{python}
+print(dsdz.friends_of_friend_ids(users[3]))
+```
+
+For each ID key in the Counter above, the corresponding value is how many friends the user with ID = 3 has with this ID. 
+
+
+
+
+
